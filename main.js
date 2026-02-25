@@ -369,7 +369,7 @@ window.cetakRekap = function() {
         </style>
         </head>
         <body>
-            <h2>BUNDA CIPTA MANDIRI SEJAHTERA</h2>
+            <h2>BUMDES CIPTA MANDIRI SEJAHTERA</h2>
             <h3>Rekap Pengeluaran Bulan ${bulan} ${tahun}</h3>
             ${rekapTableClone.outerHTML}
             <div class="footer">Dicetak pada ${new Date().toLocaleDateString('id-ID')}</div>
