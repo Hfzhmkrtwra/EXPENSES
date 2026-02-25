@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bunda Cipta Mandiri Segahtera - Expenses</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <div class="logo">
+                <i class="fas fa-chart-line"></i> 
+                <span>Bunda Cipta Mandiri Segahtera</span>
+            </div>
+            <div class="header-controls">
+                <div class="month-picker">
+                    <label>Bulan:</label>
+                    <select id="bulanSelect">
+                        <option value="1">Januari</option>
+                        <option value="2">Februari</option>
+                        <option value="3">Maret</option>
+                        <option value="4">April</option>
+                        <option value="5">Mei</option>
+                        <option value="6">Juni</option>
+                        <option value="7">Juli</option>
+                        <option value="8">Agustus</option>
+                        <option value="9">September</option>
+                        <option value="10">Oktober</option>
+                        <option value="11">November</option>
+                        <option value="12">Desember</option>
+                    </select>
+                    <select id="tahunSelect">
+                        <option value="2025">2025</option>
+                        <option value="2026" selected>2026</option>
+                        <option value="2027">2027</option>
+                    </select>
+                </div>
+                <button class="btn-tambah" onclick="location.href='formtambah.html'">
+                    <i class="fas fa-plus"></i> Tambah Data
+                </button>
+            </div>
+        </header>
+
+        <!-- Total Expenses -->
+        <div class="total-expenses">
+            <h3>Total Expenses</h3>
+            <p class="total-amount" id="totalSemua">Rp 0</p>
+        </div>
+
+        <!-- Container untuk tabel per kategori -->
+        <div id="kategoriContainer"></div>
+
+        <!-- Rekap Bulanan -->
+        <div class="rekap-section">
+            <div class="rekap-header">
+                <h3>Rekap Data Bulanan : <span id="bulanText">Februari 2026</span></h3>
+                <button class="btn-cetak" onclick="window.cetakRekap()">
+                    <i class="fas fa-print"></i> Cetak Rekap
+                </button>
+            </div>
+            <table class="rekap-table" id="rekapTable">
+                <thead>
+                    <tr>
+                        <th>Kategori</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody id="rekapBody"></tbody>
+                <tfoot>
+                    <tr>
+                        <th>Grand Total</th>
+                        <th id="grandTotalRekap">Rp 0</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+
+    <!-- Notifikasi -->
+    <div id="notificationContainer"></div>
+
+    <!-- Modal Hapus -->
+    <div id="deleteModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-exclamation-triangle" style="color:#e74c3c;"></i> Konfirmasi Hapus</h3>
+                <span class="modal-close" onclick="document.getElementById('deleteModal').style.display='none'">&times;</span>
+            </div>
+            <div class="modal-body" id="modalMessage">
+                <p>Anda akan menghapus data ini. Tindakan ini tidak dapat dibatalkan. Yakin ingin menghapus?</p>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn modal-btn-cancel" id="cancelBtn">Batal</button>
+                <button class="modal-btn modal-btn-delete" id="confirmDeleteBtn">Hapus</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="main.js"></script>
+</body>
+</html>
