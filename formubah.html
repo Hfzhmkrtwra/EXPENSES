@@ -3,9 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ubah Data Pengeluaran</title>
+    <title>Ubah Pengeluaran</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* CSS yang sama untuk konsistensi */
+        select#kategori {
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+            background-color: white;
+            font-size: 1rem;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23333' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
+            background-repeat: no-repeat;
+            background-position: right 15px center;
+            background-size: 16px;
+        }
+        @media (max-width: 600px) {
+            select#kategori {
+                font-size: 16px;
+            }
+        }
+    </style>
 </head>
 <body>
     <div class="container" style="max-width: 600px;">
@@ -16,13 +39,13 @@
         <form id="formUbah" style="background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
             <input type="hidden" id="docId">
             <div style="margin-bottom: 20px;">
-                <label>Tanggal</label>
-                <input type="date" id="tanggal" required style="width:100%; padding:12px; border-radius:10px;">
+                <label for="tanggal">Tanggal</label>
+                <input type="date" id="tanggal" required style="width:100%; padding:12px; border-radius:10px; border:1px solid #ccc;">
             </div>
             <div style="margin-bottom: 20px;">
-                <label>Kategori</label>
-                <select id="kategori" required style="width:100%; padding:12px; border-radius:10px;">
-                    <option value="">-- Pilih Kategori --</option>
+                <label for="kategori">Kategori</label>
+                <select id="kategori" required>
+                    <option value="" disabled>-- Pilih Kategori --</option>
                     <option value="Gaji karyawan">Gaji karyawan</option>
                     <option value="pakan">pakan</option>
                     <option value="vitamin">vitamin</option>
@@ -38,21 +61,21 @@
                 </select>
             </div>
             <div style="margin-bottom: 20px;">
-                <label>Deskripsi</label>
-                <input type="text" id="deskripsi" style="width:100%; padding:12px; border-radius:10px;">
+                <label for="deskripsi">Deskripsi</label>
+                <input type="text" id="deskripsi" style="width:100%; padding:12px; border-radius:10px; border:1px solid #ccc;">
             </div>
             <div style="margin-bottom: 20px;">
-                <label>PAX / PCS</label>
-                <input type="number" id="pax" min="1" required style="width:100%; padding:12px; border-radius:10px;">
+                <label for="pax">PAX / PCS</label>
+                <input type="number" id="pax" min="1" required style="width:100%; padding:12px; border-radius:10px; border:1px solid #ccc;">
             </div>
             <div style="margin-bottom: 20px;">
-                <label>Harga per unit (Rp)</label>
-                <input type="number" id="harga" min="0" required style="width:100%; padding:12px; border-radius:10px;">
+                <label for="harga">Harga per unit (Rp)</label>
+                <input type="number" id="harga" min="0" required style="width:100%; padding:12px; border-radius:10px; border:1px solid #ccc;">
             </div>
 
             <div style="display: flex; gap: 15px; justify-content: flex-end;">
-                <button type="button" onclick="location.href='index.html'" style="background: #95a5a6; color:white; padding:12px 25px; border:none; border-radius:50px; cursor:pointer;">Batal</button>
-                <button type="submit" style="background: #f39c12; color:white; padding:12px 25px; border:none; border-radius:50px; cursor:pointer;">Update</button>
+                <button type="button" onclick="location.href='index.html'" style="background: #95a5a6; color:white; padding:12px 25px; border:none; border-radius:50px; cursor:pointer;"><i class="fas fa-times"></i> Batal</button>
+                <button type="submit" style="background: #f39c12; color:white; padding:12px 25px; border:none; border-radius:50px; cursor:pointer;"><i class="fas fa-save"></i> Update</button>
             </div>
         </form>
     </div>
@@ -62,7 +85,6 @@
     <script type="module">
         import { getExpenseById, updateExpense } from './main.js';
 
-        // Ambil ID dari URL
         const urlParams = new URLSearchParams(window.location.search);
         const docId = urlParams.get('id');
 
@@ -70,7 +92,6 @@
             alert('ID tidak valid');
             window.location.href = 'index.html';
         } else {
-            // Load data
             getExpenseById(docId).then(data => {
                 document.getElementById('docId').value = docId;
                 document.getElementById('tanggal').value = data.tanggal;
@@ -95,9 +116,8 @@
             const pax = parseInt(document.getElementById('pax').value);
             const harga = parseInt(document.getElementById('harga').value);
 
-            // Validasi
             if (!tanggal || !kategori || !pax || !harga) {
-                alert('Semua field harus diisi!');
+                alert('Semua field wajib diisi!');
                 return;
             }
 
