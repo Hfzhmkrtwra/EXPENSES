@@ -11,8 +11,19 @@ const firebaseConfig = {
 
 // ==================== IMPORT FIREBASE MODULAR ====================
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.4.0/firebase-app.js';
-import { 
-    getFirestore, collection, getDocs, addDoc, updateDoc, deleteDoc, doc, getDoc, query, where, orderBy, serverTimestamp 
+import {
+    getFirestore,
+    collection,
+    getDocs,
+    addDoc,
+    updateDoc,
+    deleteDoc,
+    doc,
+    getDoc,
+    query,
+    where,
+    orderBy,
+    serverTimestamp
 } from 'https://www.gstatic.com/firebasejs/10.4.0/firebase-firestore.js';
 
 // Inisialisasi Firebase
@@ -23,7 +34,7 @@ const db = getFirestore(app);
 const KATEGORI = [
     "Gaji karyawan", "pakan", "vitamin", "antiseptik", "peti",
     "Upah panggul", "admin setor tunai", "buble wrap", "plastik",
-    "uang lembur", "komsumsi", "listrik kandang"
+    "uang lembur", "komsumsi", "listrik kandang", "Sekam" // <-- ditambahkan
 ];
 
 // ==================== UTILITY FUNCTIONS ====================
@@ -76,8 +87,8 @@ export async function loadExpenses(bulan, tahun) {
         const expensesRef = collection(db, 'expenses');
         // Coba dengan orderBy (perlu index)
         const q = query(
-            expensesRef, 
-            where('bulan', '==', bulan), 
+            expensesRef,
+            where('bulan', '==', bulan),
             where('tahun', '==', tahun),
             orderBy('tanggal', 'desc')
         );
@@ -94,8 +105,8 @@ export async function loadExpenses(bulan, tahun) {
             // Fallback: query tanpa orderBy, lalu sort manual
             const expensesRef = collection(db, 'expenses');
             const q = query(
-                expensesRef, 
-                where('bulan', '==', bulan), 
+                expensesRef,
+                where('bulan', '==', bulan),
                 where('tahun', '==', tahun)
             );
             const querySnapshot = await getDocs(q);
@@ -177,43 +188,43 @@ async function renderData() {
     const kategoriContainer = document.getElementById('kategoriContainer');
     const rekapBody = document.getElementById('rekapBody');
     const grandTotalRekap = document.getElementById('grandTotalRekap');
-
+    
     if (!bulanSelect || !tahunSelect || !bulanText || !totalSemuaEl || !kategoriContainer || !rekapBody || !grandTotalRekap) {
         console.error('Elemen penting tidak ditemukan di DOM');
         return;
     }
-
+    
     const bulan = parseInt(bulanSelect.value);
     const tahun = parseInt(tahunSelect.value);
     const bulanNama = bulanSelect.selectedOptions[0].text;
     bulanText.innerText = `${bulanNama} ${tahun}`;
-
+    
     try {
         const semuaData = await loadExpenses(bulan, tahun);
-
+        
         // Kelompokkan berdasarkan kategori
         const dataPerKategori = {};
         KATEGORI.forEach(kat => dataPerKategori[kat] = []);
-
+        
         semuaData.forEach(item => {
             if (dataPerKategori.hasOwnProperty(item.kategori)) {
                 dataPerKategori[item.kategori].push(item);
             }
         });
-
+        
         // Hitung total keseluruhan
         let totalSemua = 0;
         Object.values(dataPerKategori).forEach(arr => {
             arr.forEach(item => totalSemua += item.jumlah);
         });
         totalSemuaEl.innerText = formatRupiah(totalSemua);
-
+        
         // Render tabel per kategori
         renderKategoriTables(dataPerKategori, kategoriContainer);
-
+        
         // Render rekap bulanan
         renderRekap(dataPerKategori, totalSemua, rekapBody, grandTotalRekap);
-
+        
     } catch (error) {
         console.error('Gagal render data:', error);
         showNotification('Gagal memuat data: ' + error.message, 'error');
@@ -222,12 +233,12 @@ async function renderData() {
 
 function renderKategoriTables(dataPerKategori, container) {
     let html = '';
-
+    
     for (let kategori of KATEGORI) {
         const items = dataPerKategori[kategori] || [];
         let subtotal = items.reduce((sum, item) => sum + item.jumlah, 0);
         let rows = '';
-
+        
         if (items.length === 0) {
             rows = `<tr><td colspan="7" style="text-align:center; font-style:italic; padding:20px;">Belum ada data</td></tr>`;
         } else {
@@ -254,7 +265,7 @@ function renderKategoriTables(dataPerKategori, container) {
                 `;
             });
         }
-
+        
         html += `
         <div class="kategori-card">
             <div class="kategori-title">${kategori}</div>
@@ -342,12 +353,12 @@ window.cetakRekap = function() {
     const tahunSelect = document.getElementById('tahunSelect');
     const rekapTable = document.getElementById('rekapTable');
     const grandTotalRekap = document.getElementById('grandTotalRekap');
-
+    
     if (!bulanSelect || !tahunSelect || !rekapTable || !grandTotalRekap) {
         alert('Tidak dapat mencetak, elemen rekap tidak ditemukan.');
         return;
     }
-
+    
     const bulan = bulanSelect.selectedOptions[0].text;
     const tahun = tahunSelect.value;
     const rekapTableClone = rekapTable.cloneNode(true);
@@ -389,10 +400,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const today = new Date();
         bulanSelect.value = today.getMonth() + 1;
         tahunSelect.value = today.getFullYear();
-
+        
         bulanSelect.addEventListener('change', renderData);
         tahunSelect.addEventListener('change', renderData);
-
+        
         renderData().catch(err => {
             showNotification('Gagal memuat data awal', 'error');
         });
