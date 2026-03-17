@@ -34,7 +34,7 @@ const db = getFirestore(app);
 const KATEGORI = [
     "Gaji karyawan", "pakan", "vitamin", "antiseptik", "peti",
     "Upah panggul", "admin setor tunai", "buble wrap", "plastik",
-    "uang lembur", "komsumsi", "listrik kandang", "Sekam" // <-- ditambahkan
+    "uang lembur", "komsumsi", "listrik kandang", "Sekam", "biaya lainnya" // <-- ditambahkan
 ];
 
 // ==================== UTILITY FUNCTIONS ====================
